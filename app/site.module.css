@@ -345,6 +345,11 @@
   padding: calc(var(--header-h) + 40px) var(--gutter) clamp(32px, 6vh, 64px);
 }
 
+.pageHero {
+  min-height: auto;
+  padding-top: calc(var(--header-h) + clamp(48px, 10vh, 120px));
+}
+
 .headline {
   display: grid;
   font-size: clamp(64px, min(12vw, 17.5vh), 240px);

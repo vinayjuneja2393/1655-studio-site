@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BuiltFor, GlitchFox } from "./glitch-logo";
-import { CAL_URL, EMAIL, REELSMITH_URL, SHADRA_URL, STRANDS_URL, X_HANDLE, X_URL } from "./links";
+import { CAL_URL, EMAIL, LABS, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
@@ -92,7 +92,7 @@ function CopyEmail() {
   );
 }
 
-type Row = { label: string; detail: string; href?: string; copy?: boolean };
+type Row = { label: string; detail: string; href?: string; copy?: boolean; newTab?: boolean };
 
 const CONTACT: Row[] = [
   { label: "Book a call", detail: "cal.com/1655studio", href: CAL_URL },
@@ -100,13 +100,17 @@ const CONTACT: Row[] = [
   { label: "Email", detail: EMAIL, href: `mailto:${EMAIL}`, copy: true },
 ];
 
-const LABS: Row[] = [
-  { label: "Shadra", detail: "shadra.vercel.app", href: SHADRA_URL },
-  { label: "Strands", detail: "strands-jade.vercel.app", href: STRANDS_URL },
-  { label: "Reelsmith", detail: "reelsmith-tau.vercel.app", href: REELSMITH_URL },
-];
+const LAB_ROWS: Row[] = LABS.map((lab) => ({
+  label: lab.name,
+  detail: lab.blurb,
+  href: `/labs/${lab.slug}`,
+  newTab: true,
+}));
 
-const MENU: Row[] = [...CONTACT, { label: "AI Labs", detail: "Shadra, Strands, Reelsmith", href: "#labs" }];
+const MENU: Row[] = [
+  ...CONTACT,
+  { label: "AI Labs", detail: LABS.map((lab) => lab.name).join(", "), href: "/labs" },
+];
 
 function RowLink({ row, onClick }: { row: Row; onClick?: () => void }) {
   const body = (
@@ -117,14 +121,14 @@ function RowLink({ row, onClick }: { row: Row; onClick?: () => void }) {
     </>
   );
   if (!row.href) return <div className={s.rowStatic}>{body}</div>;
-  const external = row.href.startsWith("http");
+  const newTab = row.newTab || row.href.startsWith("http");
   return (
     <a
       className={s.rowLink}
       href={row.href}
       onClick={onClick}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
+      target={newTab ? "_blank" : undefined}
+      rel={newTab ? "noopener noreferrer" : undefined}
     >
       {body}
     </a>
@@ -198,31 +202,132 @@ const HEADLINE = [
   { text: "leaks.", pink: true },
 ];
 
-export default function Site() {
+const LABS_HEADLINE = [
+  { text: "AI", pink: false },
+  { text: "Labs.", pink: true },
+];
+
+function LabsList({ title }: { title: string }) {
+  return (
+    <section id="labs" className={s.list} aria-labelledby="labs-title">
+      <h2 id="labs-title" className={s.listTitle}>
+        {title}
+      </h2>
+      <div className={s.rows}>
+        {LAB_ROWS.map((row) => (
+          <RowLink key={row.label} row={row} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const rise = (delay: number) => ({
+  initial: { y: "110%" },
+  animate: { y: "0%" },
+  transition: { duration: 0.7, ease: OUT_EASE, delay },
+});
+
+const fade = (delay: number) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, ease: OUT_EASE, delay },
+});
+
+function HomeMain() {
+  const base = INTRO_DONE - 0.45;
+  return (
+    <main>
+      <section className={s.hero}>
+        <h1 className={s.headline}>
+          {HEADLINE.map((l, i) => (
+            <span key={l.text} className={s.lineMask}>
+              <motion.span className={`${s.line} ${l.pink ? s.pinkText : ""}`} {...rise(base + i * 0.07)}>
+                {l.text}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+
+        <div className={s.heroFoot}>
+          <motion.p className={s.lede} {...fade(base + 0.35)}>
+            1655 writes the offer, builds the home base and wires up checkout and emails for creators, coaches and
+            consultants who already sell a named offer. The full site is on its way. You don&rsquo;t have to wait for it.
+          </motion.p>
+
+          <motion.a
+            className={s.cta}
+            href={CAL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            {...fade(base + 0.45)}
+          >
+            <Roll>Book a call</Roll>
+            <span className={s.ctaIcon}>
+              <Arrow />
+            </span>
+          </motion.a>
+        </div>
+      </section>
+
+      <section className={s.list} aria-labelledby="contact-title">
+        <h2 id="contact-title" className={s.listTitle}>
+          Get in touch
+        </h2>
+        <div className={s.rows}>
+          {CONTACT.map((row) => (
+            <div key={row.label} className={s.rowWrap}>
+              <RowLink row={row} />
+              {row.copy && <CopyEmail />}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <LabsList title="AI Labs" />
+    </main>
+  );
+}
+
+function LabsMain() {
+  const base = 0.1;
+  return (
+    <main>
+      <section className={`${s.hero} ${s.pageHero}`}>
+        <h1 className={s.headline}>
+          {LABS_HEADLINE.map((l, i) => (
+            <span key={l.text} className={s.lineMask}>
+              <motion.span className={`${s.line} ${l.pink ? s.pinkText : ""}`} {...rise(base + i * 0.07)}>
+                {l.text}
+              </motion.span>
+            </span>
+          ))}
+        </h1>
+        <div className={s.heroFoot}>
+          <motion.p className={s.lede} {...fade(base + 0.25)}>
+            Tools built at 1655. Each one runs in your browser and opens in its own tab.
+          </motion.p>
+        </div>
+      </section>
+
+      <LabsList title="Tools" />
+    </main>
+  );
+}
+
+export default function Site({ page = "home" }: { page?: "home" | "labs" }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuBtn = useRef<HTMLButtonElement>(null);
-  const base = INTRO_DONE - 0.45;
+  const home = page === "home";
 
   const closeMenu = () => {
     setMenuOpen(false);
     menuBtn.current?.focus({ preventScroll: true });
   };
 
-  const rise = (delay: number) => ({
-    initial: { y: "110%" },
-    animate: { y: "0%" },
-    transition: { duration: 0.7, ease: OUT_EASE, delay },
-  });
-
-  const fade = (delay: number) => ({
-    initial: { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: OUT_EASE, delay },
-  });
-
   return (
     <MotionConfig reducedMotion="user">
-      <Intro />
+      {home && <Intro />}
 
       <header className={`${s.header} ${menuOpen ? s.headerOpen : ""}`}>
         <a href="/" className={s.brand} aria-label="1655 Studio home">
@@ -247,64 +352,7 @@ export default function Site() {
 
       <Menu open={menuOpen} onClose={closeMenu} />
 
-      <main>
-        <section className={s.hero}>
-          <h1 className={s.headline}>
-            {HEADLINE.map((l, i) => (
-              <span key={l.text} className={s.lineMask}>
-                <motion.span className={`${s.line} ${l.pink ? s.pinkText : ""}`} {...rise(base + i * 0.07)}>
-                  {l.text}
-                </motion.span>
-              </span>
-            ))}
-          </h1>
-
-          <div className={s.heroFoot}>
-            <motion.p className={s.lede} {...fade(base + 0.35)}>
-              1655 writes the offer, builds the home base and wires up checkout and emails for creators, coaches and
-              consultants who already sell a named offer. The full site is on its way. You don&rsquo;t have to wait for it.
-            </motion.p>
-
-            <motion.a
-              className={s.cta}
-              href={CAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              {...fade(base + 0.45)}
-            >
-              <Roll>Book a call</Roll>
-              <span className={s.ctaIcon}>
-                <Arrow />
-              </span>
-            </motion.a>
-          </div>
-        </section>
-
-        <section className={s.list} aria-labelledby="contact-title">
-          <h2 id="contact-title" className={s.listTitle}>
-            Get in touch
-          </h2>
-          <div className={s.rows}>
-            {CONTACT.map((row) => (
-              <div key={row.label} className={s.rowWrap}>
-                <RowLink row={row} />
-                {row.copy && <CopyEmail />}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="labs" className={s.list} aria-labelledby="labs-title">
-          <h2 id="labs-title" className={s.listTitle}>
-            AI Labs
-          </h2>
-          <div className={s.rows}>
-            {LABS.map((row) => (
-              <RowLink key={row.label} row={row} />
-            ))}
-          </div>
-        </section>
-      </main>
+      {home ? <HomeMain /> : <LabsMain />}
 
       <footer className={s.footer}>
         <div className={s.footRow}>
