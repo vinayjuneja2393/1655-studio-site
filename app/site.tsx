@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BuiltFor, GlitchFox } from "./glitch-logo";
-import { CAL_URL, EMAIL, X_HANDLE, X_URL } from "./links";
+import { CAL_URL, EMAIL, SHADRA_URL, STRANDS_URL, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
@@ -73,7 +73,7 @@ function Roll({ children }: { children: string }) {
 function Arrow() {
   return (
     <svg className={s.arrow} viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-      <path d="M7 17L17 7M17 7H8.5M17 7v8.5" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+      <path d="M6.5 17.5L16 8M8 8h8v8" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
     </svg>
   );
 }
@@ -92,21 +92,28 @@ function CopyEmail() {
   );
 }
 
-type Row = { label: string; detail: string; href?: string; soon?: boolean; copy?: boolean };
+type Row = { label: string; detail: string; href?: string; copy?: boolean };
 
-const ROWS: Row[] = [
+const CONTACT: Row[] = [
   { label: "Book a call", detail: "cal.com/1655studio", href: CAL_URL },
   { label: "Talk to me", detail: `${X_HANDLE} on X`, href: X_URL },
   { label: "Email", detail: EMAIL, href: `mailto:${EMAIL}`, copy: true },
-  { label: "AI Labs", detail: "Shadra, Moviq, Stillframe", soon: true },
 ];
+
+const LABS: Row[] = [
+  { label: "Shadra", detail: "shadra.vercel.app", href: SHADRA_URL },
+  { label: "Strands", detail: "strands-jade.vercel.app", href: STRANDS_URL },
+  { label: "Reelsmith", detail: "In the works" },
+];
+
+const MENU: Row[] = [...CONTACT, { label: "AI Labs", detail: "Shadra, Strands, Reelsmith", href: "#labs" }];
 
 function RowLink({ row, onClick }: { row: Row; onClick?: () => void }) {
   const body = (
     <>
       <span className={s.rowLabel}>{row.label}</span>
       <span className={s.rowDetail}>{row.detail}</span>
-      {row.soon ? <span className={s.soon}>Soon</span> : row.copy ? <span className={s.copySlot} /> : <Arrow />}
+      {!row.href ? <span /> : row.copy ? <span className={s.copySlot} /> : <Arrow />}
     </>
   );
   if (!row.href) return <div className={s.rowStatic}>{body}</div>;
@@ -165,7 +172,7 @@ function Menu({ open, onClose }: { open: boolean; onClose: () => void }) {
           </div>
 
           <nav ref={navRef} className={s.rows}>
-            {ROWS.map((row, i) => (
+            {MENU.map((row, i) => (
               <div key={row.label} className={s.rowMask}>
                 <motion.div
                   variants={{
@@ -223,8 +230,6 @@ export default function Site() {
           <span className={s.wordmark}>1655.studio</span>
         </a>
 
-        <span className={s.status}>Booking one client at a time</span>
-
         <button
           ref={menuBtn}
           className={s.menuBtn}
@@ -275,16 +280,27 @@ export default function Site() {
           </div>
         </section>
 
-        <section className={s.contact} aria-labelledby="contact-title">
-          <h2 id="contact-title" className={s.contactTitle}>
+        <section className={s.list} aria-labelledby="contact-title">
+          <h2 id="contact-title" className={s.listTitle}>
             Get in touch
           </h2>
           <div className={s.rows}>
-            {ROWS.map((row) => (
+            {CONTACT.map((row) => (
               <div key={row.label} className={s.rowWrap}>
                 <RowLink row={row} />
                 {row.copy && <CopyEmail />}
               </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="labs" className={s.list} aria-labelledby="labs-title">
+          <h2 id="labs-title" className={s.listTitle}>
+            AI Labs
+          </h2>
+          <div className={s.rows}>
+            {LABS.map((row) => (
+              <RowLink key={row.label} row={row} />
             ))}
           </div>
         </section>

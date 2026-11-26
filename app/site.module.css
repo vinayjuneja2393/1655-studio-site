@@ -101,7 +101,7 @@
   z-index: var(--z-header);
   height: var(--header-h);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto;
   align-items: center;
   padding: 0 var(--gutter);
   background: var(--ink);
@@ -112,10 +112,6 @@
 .headerOpen {
   background: transparent;
   border-bottom-color: transparent;
-  color: var(--ink);
-}
-
-.headerOpen .status {
   color: var(--ink);
 }
 
@@ -148,15 +144,6 @@
   line-height: 1;
   letter-spacing: -0.01em;
   text-transform: uppercase;
-}
-
-.status {
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  transition: color 200ms ease-out;
 }
 
 .menuBtn {
@@ -279,19 +266,6 @@
   transition: transform 220ms var(--ease-out);
 }
 
-.soon {
-  justify-self: end;
-  padding: 5px 9px;
-  border-radius: 999px;
-  background: var(--orange);
-  color: var(--ink);
-  font-family: var(--font-mono), monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .rowLink:hover .rowLabel {
     transform: translateX(12px);
@@ -299,13 +273,13 @@
   .rowLink:hover .arrow {
     transform: rotate(45deg);
   }
-  .contact .rowLink:hover .rowLabel {
+  .list .rowLink:hover .rowLabel {
     color: var(--pink);
   }
 }
 
 .copySlot {
-  width: 88px;
+  width: 64px;
 }
 
 .copyBtn {
@@ -313,26 +287,23 @@
   right: 0;
   top: 50%;
   translate: 0 -50%;
-  min-width: 88px;
+  min-width: 64px;
   height: 44px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1.5px solid var(--line-strong);
+  text-align: end;
   font-family: var(--font-mono), monospace;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: background-color 150ms ease-out, color 150ms ease-out, transform 150ms ease-out;
-}
-
-.copyBtn:active {
-  transform: scale(0.96);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  color: var(--muted);
+  transition: color 150ms ease-out;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .copyBtn:hover {
-    background: var(--paper);
-    color: var(--ink);
+    color: var(--paper);
   }
 }
 
@@ -453,6 +424,7 @@
 }
 
 .ctaIcon .arrow {
+  justify-self: center;
   width: 24px;
   height: 24px;
 }
@@ -466,13 +438,17 @@
   }
 }
 
-/* Contact */
+/* Lists: contact and labs */
 
-.contact {
-  padding: clamp(64px, 10vw, 140px) var(--gutter) clamp(64px, 8vw, 120px);
+.list {
+  padding: clamp(64px, 10vw, 140px) var(--gutter) 0;
 }
 
-.contactTitle {
+.list:last-of-type {
+  padding-bottom: clamp(64px, 8vw, 120px);
+}
+
+.listTitle {
   margin-bottom: 20px;
   font-family: var(--font-mono), monospace;
   font-size: 12px;
@@ -482,17 +458,17 @@
   color: var(--muted);
 }
 
-.contact .rows,
-.contact .rowLink,
-.contact .rowStatic {
+.list .rows,
+.list .rowLink,
+.list .rowStatic {
   border-color: var(--line-strong);
 }
 
-.contact .rowDetail {
+.list .rowDetail {
   color: var(--muted);
 }
 
-.contact .rowStatic .rowLabel {
+.list .rowStatic .rowLabel {
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -551,9 +527,6 @@
   .header {
     grid-template-columns: 1fr auto;
   }
-  .status {
-    display: none;
-  }
   .fox {
     width: 36px;
     height: 36px;
@@ -589,8 +562,7 @@
     text-align: start;
   }
   .rowLink > .arrow,
-  .rowLink > .copySlot,
-  .rowStatic > .soon {
+  .rowLink > .copySlot {
     grid-column: 2;
     grid-row: 1;
   }
