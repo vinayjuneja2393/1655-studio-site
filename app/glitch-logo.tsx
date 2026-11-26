@@ -10,7 +10,7 @@ const PINK: [number, number, number] = [251, 40, 116];
 const WHITE: [number, number, number] = [255, 255, 255];
 const CELL = 3; // css px per dither cell
 
-// Glitch bursts: [start, length] in seconds. The last one is the exit hit.
+// Glitch bursts as [start, length] in seconds; the exit hit is separate, in glitchAmount.
 const BURSTS: [number, number][] = [
   [0.28, 0.09],
   [0.62, 0.06],
@@ -58,7 +58,6 @@ export function GlitchFox({ duration }: { duration: number }) {
     const tint = makeCanvas(W);
     const tctx = tint.getContext("2d")!;
 
-    // A few grain tiles to cycle through
     const grain = Array.from({ length: 4 }, () => {
       const c = makeCanvas(160);
       const x = c.getContext("2d")!;
@@ -84,8 +83,8 @@ export function GlitchFox({ duration }: { duration: number }) {
 
     const glitchAmount = (t: number) => {
       for (const [b, len] of BURSTS) if (t >= b && t < b + len) return 0.6 + Math.random() * 0.4;
-      if (t > duration - 0.22) return 1; // final hit
-      return Math.random() < 0.03 ? 0.25 : 0; // stray flickers
+      if (t > duration - 0.22) return 1;
+      return Math.random() < 0.03 ? 0.25 : 0;
     };
 
     const tinted = (rgb: [number, number, number]) => {
@@ -104,7 +103,6 @@ export function GlitchFox({ duration }: { duration: number }) {
       const p = clamp(t / duration);
       frameNo++;
 
-      // 1) Dither reveal: density grows over the first ~65%
       const r = easeOut(clamp(p / 0.65));
       const jitter = frameNo % 2;
       if (lum && alpha) {
@@ -131,7 +129,6 @@ export function GlitchFox({ duration }: { duration: number }) {
         dctx.putImageData(out, 0, 0);
       }
 
-      // 2) Composite: dither, crossfading into the crisp mark
       const full = easeOut(clamp((p - 0.55) / 0.3));
       cctx.globalCompositeOperation = "source-over";
       cctx.clearRect(0, 0, W, W);
@@ -144,7 +141,6 @@ export function GlitchFox({ duration }: { duration: number }) {
       if (img.complete) cctx.drawImage(img, 0, 0, W, W);
       cctx.globalAlpha = 1;
 
-      // 3) Grain, only on the mark
       cctx.globalCompositeOperation = "source-atop";
       cctx.globalAlpha = 0.22 - full * 0.1;
       const g = grain[frameNo % grain.length];
@@ -153,7 +149,6 @@ export function GlitchFox({ duration }: { duration: number }) {
       cctx.globalAlpha = 1;
       cctx.globalCompositeOperation = "source-over";
 
-      // 4) Output, with glitch when a burst is on
       ctx.clearRect(0, 0, W, W);
       const gl = glitchAmount(t);
       if (gl > 0) {
@@ -165,7 +160,6 @@ export function GlitchFox({ duration }: { duration: number }) {
         ctx.globalCompositeOperation = "source-over";
         ctx.globalAlpha = 1;
 
-        // Slices shifted sideways
         let y = 0;
         while (y < W) {
           const h = (6 + Math.random() * 38) * dpr;
@@ -174,7 +168,6 @@ export function GlitchFox({ duration }: { duration: number }) {
           y += h;
         }
 
-        // Scanlines
         ctx.fillStyle = "rgba(10,10,10,0.35)";
         for (let sy = 0; sy < W; sy += 3 * dpr) ctx.fillRect(0, sy, W, dpr);
       } else {
@@ -204,41 +197,8 @@ export function GlitchFox({ duration }: { duration: number }) {
   return <canvas ref={ref} className={s.glitchCanvas} aria-hidden="true" />;
 }
 
-const GLYPHS = "!<>-_\\/[]{}=+*^?#01ABCDEFX";
-const WORD = "1655.STUDIO";
-
-/** "1655.STUDIO" decodes left to right while a counter runs to 100. */
-export function DecodeLabel({ duration }: { duration: number }) {
-  const [text, setText] = useState(WORD.replace(/./g, " "));
-  const [pct, setPct] = useState(0);
-
-  useEffect(() => {
-    const t0 = performance.now();
-    const id = setInterval(() => {
-      const p = clamp((performance.now() - t0) / 1000 / (duration * 0.85));
-      const settled = Math.floor(p * WORD.length);
-      setText(
-        WORD.split("")
-          .map((ch, i) => (i < settled ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]))
-          .join(""),
-      );
-      setPct(Math.round(p * 100));
-      if (p >= 1) clearInterval(id);
-    }, 45);
-    return () => clearInterval(id);
-  }, [duration]);
-
-  return (
-    <div className={s.decode}>
-      <span className={s.decodeWord}>{text}</span>
-      <span className={s.decodePct}>{String(pct).padStart(3, "0")}%</span>
-    </div>
-  );
-}
-
 const AUDIENCE = ["Creators", "Coaches", "Consultants"];
 
-/** "Built for" + each audience word, letters staggering in fast, one word after another. */
 export function BuiltFor({ start, each }: { start: number; each: number }) {
   const [i, setI] = useState(-1);
 

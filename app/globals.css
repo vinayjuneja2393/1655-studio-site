@@ -1,19 +1,19 @@
 :root {
-  /* 1655 colours, pulled from the fox mark */
   --pink: #fb2874;
-  --pink-deep: #e0115f;
   --orange: #f08a24;
   --ink: #0a0a0a;
-  --ink-2: #161616;
   --paper: #ffffff;
   --line: rgba(255, 255, 255, 0.14);
+  --line-strong: rgba(255, 255, 255, 0.28);
   --muted: rgba(255, 255, 255, 0.62);
 
   --gutter: clamp(16px, 2.2vw, 32px);
   --header-h: 76px;
-  --radius: 22px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --z-menu: 70;
+  --z-header: 90;
+  --z-intro: 100;
 }
 
 * {
@@ -31,9 +31,19 @@ html {
 body {
   background: var(--ink);
   font-family: var(--font-display), system-ui, sans-serif;
+  font-synthesis: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+[id] {
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 a {
@@ -55,6 +65,14 @@ button {
 }
 
 :focus-visible {
-  outline: 2px solid var(--pink);
+  outline: 2px solid currentColor;
   outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
