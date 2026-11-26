@@ -283,8 +283,6 @@ function HomeMain() {
           ))}
         </div>
       </section>
-
-      <LabsList title="AI Labs" />
     </main>
   );
 }
