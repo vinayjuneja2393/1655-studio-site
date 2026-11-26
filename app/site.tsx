@@ -3,15 +3,18 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { DecodeLabel, GlitchFox } from "./glitch-logo";
 import { CAL_URL, EMAIL, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
 const OUT_EASE = [0.22, 1, 0.36, 1] as const;
 const COLS = 6;
-const INTRO_DONE = 2.0; // seconds until the last curtain has cleared
+const LOGO = 1.7; // glitch-logo beat before the curtains move
+const CURTAINS_START = LOGO + 0.1;
+const INTRO_DONE = CURTAINS_START + 0.25 + (COLS - 1) * 0.09 + 0.9; // last pink curtain cleared
 
-/* ---------- Intro: two layers of curtains draw all the way up ---------- */
+/* ---------- Intro: glitch fox, then two layers of curtains draw all the way up ---------- */
 
 function Intro() {
   const reduce = useReducedMotion();
@@ -32,23 +35,26 @@ function Intro() {
             className={s.introPink}
             initial={{ scaleY: 1 }}
             animate={{ scaleY: 0 }}
-            transition={{ duration: 0.9, ease: CURTAIN_EASE, delay: 0.8 + i * 0.09 }}
+            transition={{ duration: 0.9, ease: CURTAIN_EASE, delay: CURTAINS_START + 0.25 + i * 0.09 }}
           />
           <motion.div
             className={s.introBlack}
             initial={{ scaleY: 1 }}
             animate={{ scaleY: 0 }}
-            transition={{ duration: 0.9, ease: CURTAIN_EASE, delay: 0.55 + i * 0.09 }}
+            transition={{ duration: 0.9, ease: CURTAIN_EASE, delay: CURTAINS_START + i * 0.09 }}
           />
         </div>
       ))}
       <motion.div
         className={s.introMark}
-        initial={{ opacity: 1, scale: 1 }}
-        animate={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.25, delay: 0.45 }}
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 0.12, delay: LOGO }}
       >
-        <Image src="/fox.png" alt="" width={96} height={96} priority sizes="96px" />
+        <div className={s.loader}>
+          <GlitchFox duration={LOGO} />
+          <DecodeLabel duration={LOGO} />
+        </div>
       </motion.div>
     </div>
   );
