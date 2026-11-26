@@ -1,31 +1,39 @@
 import type { Metadata, Viewport } from "next";
-import { Bebas_Neue, Inter } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const display = Bebas_Neue({
+const display = Archivo({
   variable: "--font-display",
-  weight: "400",
   subsets: ["latin"],
+  axes: ["wdth"],
 });
 
-const text = Inter({
-  variable: "--font-text",
+const mono = JetBrains_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "1655 Studio · Coming soon",
+  title: "1655 Studio · System studio for creators, coaches and consultants",
   description:
-    "1655 helps creators, coaches and consultants who already sell a named offer stop losing buyers between their content and the sale.",
+    "1655 writes the offer, builds the home base and wires up checkout and emails for creators, coaches and consultants who already sell a named offer.",
+  metadataBase: new URL("https://1655.studio"),
+  openGraph: {
+    title: "1655 Studio",
+    description: "Your content sells. Your link leaks. 1655 fixes the path in between.",
+    url: "https://1655.studio",
+    siteName: "1655 Studio",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${text.variable}`}>
+    <html lang="en" className={`${display.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

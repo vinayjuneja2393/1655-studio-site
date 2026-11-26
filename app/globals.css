@@ -1,10 +1,19 @@
 :root {
-  --bg: #ffffff;
-  --ink: #000000;
-  --muted: #6b6b6b;
-  --hairline: #d4d4d4;
-  --header-h: 72px;
-  --gutter: clamp(16px, 2.4vw, 32px);
+  /* 1655 colours, pulled from the fox mark */
+  --pink: #fb2874;
+  --pink-deep: #e0115f;
+  --orange: #f08a24;
+  --ink: #0a0a0a;
+  --ink-2: #161616;
+  --paper: #ffffff;
+  --line: rgba(255, 255, 255, 0.14);
+  --muted: rgba(255, 255, 255, 0.62);
+
+  --gutter: clamp(16px, 2.2vw, 32px);
+  --header-h: 76px;
+  --radius: 22px;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-curtain: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 * {
@@ -13,17 +22,18 @@
   padding: 0;
 }
 
-html,
-body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--ink);
+html {
+  background: var(--ink);
+  color: var(--paper);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: var(--font-text), system-ui, sans-serif;
+  background: var(--ink);
+  font-family: var(--font-display), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
-  overflow: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 a {
@@ -31,7 +41,20 @@ a {
   text-decoration: none;
 }
 
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
 ::selection {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--pink);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
 }
