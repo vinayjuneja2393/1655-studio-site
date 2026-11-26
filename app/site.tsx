@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { BuiltFor, GlitchFox } from "./glitch-logo";
-import { CAL_URL, EMAIL, SHADRA_URL, STRANDS_URL, X_HANDLE, X_URL } from "./links";
+import { CAL_URL, EMAIL, REELSMITH_URL, SHADRA_URL, STRANDS_URL, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
@@ -103,7 +103,7 @@ const CONTACT: Row[] = [
 const LABS: Row[] = [
   { label: "Shadra", detail: "shadra.vercel.app", href: SHADRA_URL },
   { label: "Strands", detail: "strands-jade.vercel.app", href: STRANDS_URL },
-  { label: "Reelsmith", detail: "In the works" },
+  { label: "Reelsmith", detail: "reelsmith-tau.vercel.app", href: REELSMITH_URL },
 ];
 
 const MENU: Row[] = [...CONTACT, { label: "AI Labs", detail: "Shadra, Strands, Reelsmith", href: "#labs" }];
