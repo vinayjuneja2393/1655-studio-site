@@ -236,7 +236,7 @@ export function DecodeLabel({ duration }: { duration: number }) {
   );
 }
 
-const AUDIENCE = ["Creators", "Coaches", "Consultants", "Podcasters", "Experts"];
+const AUDIENCE = ["Creators", "Coaches", "Consultants"];
 
 /** "Built for" + each audience word, letters staggering in fast, one word after another. */
 export function BuiltFor({ start, each }: { start: number; each: number }) {

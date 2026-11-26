@@ -10,7 +10,7 @@ import s from "./site.module.css";
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
 const OUT_EASE = [0.22, 1, 0.36, 1] as const;
 const COLS = 6;
-const LOGO = 2.2; // glitch-logo + "built for" beat before the curtains move
+const LOGO = 1.9; // glitch-logo + "built for" beat before the curtains move
 const CURTAINS_START = LOGO + 0.1;
 const INTRO_DONE = CURTAINS_START + 0.25 + (COLS - 1) * 0.09 + 0.9; // last pink curtain cleared
 
@@ -53,7 +53,7 @@ function Intro() {
       >
         <div className={s.loader}>
           <GlitchFox duration={LOGO} />
-          <BuiltFor start={0.35} each={0.36} />
+          <BuiltFor start={0.35} each={0.48} />
           <DecodeLabel duration={LOGO} />
         </div>
       </motion.div>
