@@ -57,6 +57,11 @@
 }
 
 .decode {
+  position: fixed;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  justify-content: space-between;
   display: flex;
   align-items: center;
   gap: 18px;
@@ -75,6 +80,51 @@
 .decodePct {
   color: var(--pink);
   font-variant-numeric: tabular-nums;
+}
+
+/* "Built for" words in the loader */
+
+.builtFor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.builtLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.builtWordMask {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  overflow: hidden;
+  height: 1em;
+  line-height: 1;
+  font-size: clamp(44px, 8vw, 88px);
+  padding-bottom: 0.04em;
+  box-sizing: content-box;
+}
+
+.builtWord {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  font-weight: 900;
+  font-stretch: 70%;
+  font-variation-settings: "wdth" 70;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--pink);
+}
+
+.builtChar {
+  display: inline-block;
+  will-change: transform;
 }
 
 /* ================= Header ================= */

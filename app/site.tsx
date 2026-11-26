@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { DecodeLabel, GlitchFox } from "./glitch-logo";
+import { BuiltFor, DecodeLabel, GlitchFox } from "./glitch-logo";
 import { CAL_URL, EMAIL, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
 const OUT_EASE = [0.22, 1, 0.36, 1] as const;
 const COLS = 6;
-const LOGO = 1.7; // glitch-logo beat before the curtains move
+const LOGO = 2.2; // glitch-logo + "built for" beat before the curtains move
 const CURTAINS_START = LOGO + 0.1;
 const INTRO_DONE = CURTAINS_START + 0.25 + (COLS - 1) * 0.09 + 0.9; // last pink curtain cleared
 
@@ -53,6 +53,7 @@ function Intro() {
       >
         <div className={s.loader}>
           <GlitchFox duration={LOGO} />
+          <BuiltFor start={0.35} each={0.36} />
           <DecodeLabel duration={LOGO} />
         </div>
       </motion.div>

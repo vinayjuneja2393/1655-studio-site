@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import s from "./site.module.css";
 
@@ -231,6 +232,50 @@ export function DecodeLabel({ duration }: { duration: number }) {
     <div className={s.decode}>
       <span className={s.decodeWord}>{text}</span>
       <span className={s.decodePct}>{String(pct).padStart(3, "0")}%</span>
+    </div>
+  );
+}
+
+const AUDIENCE = ["Creators", "Coaches", "Consultants", "Podcasters", "Experts"];
+
+/** "Built for" + each audience word, letters staggering in fast, one word after another. */
+export function BuiltFor({ start, each }: { start: number; each: number }) {
+  const [i, setI] = useState(-1);
+
+  useEffect(() => {
+    const timers = AUDIENCE.map((_, k) => setTimeout(() => setI(k), (start + k * each) * 1000));
+    return () => timers.forEach(clearTimeout);
+  }, [start, each]);
+
+  return (
+    <div className={s.builtFor}>
+      <motion.span
+        className={s.builtLabel}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, delay: start - 0.15, ease: [0.22, 1, 0.36, 1] }}
+      >
+        Built for
+      </motion.span>
+      <span className={s.builtWordMask}>
+        <AnimatePresence initial={false}>
+          {i >= 0 && (
+            <motion.span key={AUDIENCE[i]} className={s.builtWord} aria-label={AUDIENCE[i]}>
+              {AUDIENCE[i].split("").map((ch, k) => (
+                <motion.span
+                  key={k}
+                  className={s.builtChar}
+                  initial={{ y: "105%" }}
+                  animate={{ y: "0%", transition: { duration: 0.24, ease: [0.22, 1, 0.36, 1], delay: 0.05 + k * 0.016 } }}
+                  exit={{ y: "-105%", transition: { duration: 0.14, ease: [0.55, 0, 1, 0.45], delay: k * 0.006 } }}
+                >
+                  {ch}
+                </motion.span>
+              ))}
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </span>
     </div>
   );
 }
