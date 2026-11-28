@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { BuiltFor, GlitchFox } from "./glitch-logo";
+import { BuiltFor, GlitchMark } from "./glitch-logo";
 import { CAL_URL, EMAIL, LABS, X_HANDLE, X_URL } from "./links";
 import s from "./site.module.css";
 
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
 const OUT_EASE = [0.22, 1, 0.36, 1] as const;
 const COLS = 6;
-const LOGO = 1.9;
+const LOGO = 1.4;
 const CURTAINS_START = LOGO + 0.1;
 // Last pink curtain: starts 0.25s after the black row, staggered across 6 columns.
 const INTRO_DONE = CURTAINS_START + 0.25 + (COLS - 1) * 0.09 + 0.9;
@@ -51,8 +51,8 @@ function Intro() {
         transition={{ duration: 0.12, delay: LOGO }}
       >
         <div className={s.loader}>
-          <GlitchFox duration={LOGO} />
-          <BuiltFor start={0.35} each={0.48} />
+          <GlitchMark duration={LOGO} />
+          <BuiltFor start={0.2} each={0.4} />
         </div>
       </motion.div>
     </div>
