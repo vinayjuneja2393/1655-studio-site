@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import s from "./site.module.css";
 
-const MARKS = [1, 2, 3, 4, 5].map((n) => `/intro/mark-${n}.svg`);
+const MARKS = [1, 2, 3, 4].map((n) => `/intro/${n}.svg`);
 
-/** Cycles the five wordmark frames, with a short slice-and-split glitch on every swap. */
+/** Cycles the four wordmark frames, with a short slice-and-split glitch on every swap. */
 export function GlitchMark({ duration }: { duration: number }) {
   const [i, setI] = useState(0);
 
@@ -18,7 +18,7 @@ export function GlitchMark({ duration }: { duration: number }) {
 
   return (
     <div className={s.mark} aria-hidden="true">
-      {/* Every frame stays mounted so all five are fetched up front and swaps never wait on the network. */}
+      {/* Every frame stays mounted so all four are fetched up front and swaps never wait on the network. */}
       {MARKS.map((src, k) => (
         <img key={src} src={src} alt="" className={s.markFrame} style={{ opacity: k === i ? 1 : 0 }} />
       ))}

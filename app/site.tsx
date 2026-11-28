@@ -10,7 +10,7 @@ import s from "./site.module.css";
 const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const;
 const OUT_EASE = [0.22, 1, 0.36, 1] as const;
 const COLS = 6;
-const LOGO = 1.4;
+const LOGO = 1.2;
 const CURTAINS_START = LOGO + 0.1;
 // Last pink curtain: starts 0.25s after the black row, staggered across 6 columns.
 const INTRO_DONE = CURTAINS_START + 0.25 + (COLS - 1) * 0.09 + 0.9;
@@ -52,7 +52,7 @@ function Intro() {
       >
         <div className={s.loader}>
           <GlitchMark duration={LOGO} />
-          <BuiltFor start={0.2} each={0.4} />
+          <BuiltFor start={0.15} each={0.34} />
         </div>
       </motion.div>
     </div>
