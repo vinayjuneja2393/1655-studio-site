@@ -329,7 +329,7 @@ export default function Site({ page = "home" }: { page?: "home" | "labs" }) {
 
       <header className={`${s.header} ${menuOpen ? s.headerOpen : ""}`}>
         <a href="/" className={s.brand} aria-label="1655 Studio home">
-          <Image src="/fox.png" alt="" width={44} height={44} priority sizes="44px" className={s.fox} />
+          <Image src="/logo.svg" alt="" width={44} height={44} priority unoptimized className={s.fox} />
           <span className={s.wordmark}>1655.studio</span>
         </a>
 
